@@ -1,0 +1,1 @@
+export type FixtureResult = [number, number, number];
