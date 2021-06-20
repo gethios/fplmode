@@ -2,8 +2,14 @@ import { MIN_PLAYED_MINIMUM } from "./constants.ts";
 import { FixtureResult } from "./interfaces.ts";
 import { TopPerfomers } from "./types.ts";
 
-export function printSeasonResults(name: string, home: FixtureResult, away: FixtureResult, homePoints: number, awayPoints: number): void {
-    console.log(`
+export function printSeasonResults(
+  name: string,
+  home: FixtureResult,
+  away: FixtureResult,
+  homePoints: number,
+  awayPoints: number,
+): void {
+  console.log(`
   ${name}`);
 
   console.table({
@@ -35,7 +41,7 @@ export function printSeasonResults(name: string, home: FixtureResult, away: Fixt
 }
 
 export function printTopPerformers(topPerformers: TopPerfomers[]): void {
-    console.log(`
+  console.log(`
   Top performers (>= ${MIN_PLAYED_MINIMUM} minutes played)`);
   console.table(topPerformers);
 }

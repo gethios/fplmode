@@ -10,19 +10,33 @@ export function getTeamId(name: string, teams: Team[]): number {
   return team?.id ?? -1;
 }
 
-export function getTeamFixtures(teamId: number, fixtures: Fixture[]): Fixture[] {
-  return fixtures.filter((fix,) => (fix.team_h === teamId || fix.team_a === teamId));
+export function getTeamFixtures(
+  teamId: number,
+  fixtures: Fixture[],
+): Fixture[] {
+  return fixtures.filter((
+    fix,
+  ) => (fix.team_h === teamId || fix.team_a === teamId));
 }
 
-export function getHomeGamesForTeam(teamId: number, fixtures: Fixture[]): Fixture[] {
+export function getHomeGamesForTeam(
+  teamId: number,
+  fixtures: Fixture[],
+): Fixture[] {
   return fixtures.filter((fix) => fix.team_h === teamId);
 }
 
-export function getAwayGamesForTeam(teamId: number, fixtures: Fixture[]): Fixture[] {
+export function getAwayGamesForTeam(
+  teamId: number,
+  fixtures: Fixture[],
+): Fixture[] {
   return fixtures.filter((fix) => fix.team_a === teamId);
 }
 
-export function getHomeResultsForTeam(teamId: number, fixtures: Fixture[]): FixtureResult {
+export function getHomeResultsForTeam(
+  teamId: number,
+  fixtures: Fixture[],
+): FixtureResult {
   const homeGames = getHomeGamesForTeam(teamId, fixtures);
 
   let win = 0;
@@ -42,7 +56,10 @@ export function getHomeResultsForTeam(teamId: number, fixtures: Fixture[]): Fixt
   return { win, draw, loss };
 }
 
-export function getAwayResultsForTeam(teamId: number, fixtures: Fixture[]): FixtureResult {
+export function getAwayResultsForTeam(
+  teamId: number,
+  fixtures: Fixture[],
+): FixtureResult {
   const awayGames = getAwayGamesForTeam(teamId, fixtures);
 
   let win = 0;
@@ -62,6 +79,9 @@ export function getAwayResultsForTeam(teamId: number, fixtures: Fixture[]): Fixt
   return { win, draw, loss };
 }
 
-export function getPlayersFromTeam(teamId: number, players: Element[]): Element[] {
+export function getPlayersFromTeam(
+  teamId: number,
+  players: Element[],
+): Element[] {
   return players.filter((player) => player.team === teamId);
 }

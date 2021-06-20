@@ -253,7 +253,7 @@ export enum Identifier {
 }
 
 export interface FixtureResult {
-  win: number,
-  draw: number,
-  loss: number
+  win: number;
+  draw: number;
+  loss: number;
 }
