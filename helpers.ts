@@ -44,13 +44,13 @@ export function getHomeResultsForTeam(teamId: number, fixtures: Fixture[]): Fixt
 }
 
 export function getAwayResultsForTeam(teamId: number, fixtures: Fixture[]): FixtureResult {
-  const homeGames = getAwayGamesForTeam(teamId, fixtures);
+  const awayGames = getAwayGamesForTeam(teamId, fixtures);
 
   let win = 0;
   let draw = 0;
   let loss = 0;
 
-  homeGames.forEach((game) => {
+  awayGames.forEach((game) => {
     if (game.team_a_score > game.team_h_score) {
       win += 1;
     } else if (game.team_a_score < game.team_h_score) {
