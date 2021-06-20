@@ -1,13 +1,15 @@
 import { parse } from "https://deno.land/std@0.99.0/flags/mod.ts";
+import { MIN_PLAYED_MINIMUM } from "./constants.ts";
 
-import { fetchAllTeamData, fetchFixtureDataForTeam } from "./fetch.ts";
+import { fetchAllTeamData, fetchFixtureDataForTeam, fetchPlayerDataForTeam } from "./fetch.ts";
 import {
   getAwayResultsForTeam,
   getHomeResultsForTeam,
   getTeamId,
 } from "./helpers.ts";
 import { Team } from "./interfaces.ts";
-import { TeamListItem } from "./types.ts";
+import { printSeasonResults, printTopPerformers } from "./output.ts";
+import { TeamListItem, TopPerfomers } from "./types.ts";
 
 const run = async () => {
   const parseArgs = parse(Deno.args);
@@ -31,42 +33,32 @@ const run = async () => {
 
   const teamId = getTeamId(name, teams);
 
+  await showSeasonResult(teamId, name);
+  await showTopPerformers(teamId);
+};
+
+async function showSeasonResult(teamId: number, name: string): Promise<void> {
   const fixtures = await fetchFixtureDataForTeam(teamId);
 
-  const [homeWin, homeDraw, homeLoss] = getHomeResultsForTeam(teamId, fixtures);
-  const [awayWin, awayDraw, awayLoss] = getAwayResultsForTeam(teamId, fixtures);
+  const home = getHomeResultsForTeam(teamId, fixtures);
+  const away = getAwayResultsForTeam(teamId, fixtures);
 
-  const homePoints = (3 * homeWin) + homeDraw;
-  const awayPoints = (3 * awayWin) + awayDraw;
+  const homePoints = (3 * home.win) + home.draw;
+  const awayPoints = (3 * away.win) + away.draw;
 
-  console.log(`
-                          ${name}`);
-  console.table({
-    Home: [
-      {
-        win: homeWin,
-        draw: homeDraw,
-        loss: homeLoss,
-        points: homePoints,
-      },
-    ],
-    Away: [
-      {
-        win: awayWin,
-        draw: awayDraw,
-        loss: awayLoss,
-        points: awayPoints,
-      },
-    ],
-    Total: [
-      {
-        win: homeWin + awayWin,
-        draw: homeDraw + awayDraw,
-        loss: homeLoss + awayLoss,
-        points: homePoints + awayPoints,
-      },
-    ],
+  printSeasonResults(name, home, away, homePoints, awayPoints);
+}
+
+async function showTopPerformers(teamId: number): Promise<void> {
+  let players = await fetchPlayerDataForTeam(teamId);
+  players = players.sort((a, b) => (a.points_per_game > b.points_per_game) ? -1 : ((a.points_per_game < b.points_per_game) ? 1 : 0));
+  players = players.filter((player) => player.minutes > MIN_PLAYED_MINIMUM);
+
+  const topPerformers: TopPerfomers[] = players.slice(0, 5).map((player) => {
+    return {name: player.web_name, value: player.value_season, points_per_game: player.points_per_game}
   });
-};
+
+  printTopPerformers(topPerformers);
+}
 
 run();

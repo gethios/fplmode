@@ -251,3 +251,9 @@ export enum Identifier {
   Saves = "saves",
   YellowCards = "yellow_cards",
 }
+
+export interface FixtureResult {
+  win: number,
+  draw: number,
+  loss: number
+}

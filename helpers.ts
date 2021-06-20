@@ -1,5 +1,4 @@
-import { Fixture, Team } from "./interfaces.ts";
-import { FixtureResult } from "./types.ts";
+import { Element, Fixture, FixtureResult, Team } from "./interfaces.ts";
 
 export function getTeamId(name: string, teams: Team[]): number {
   const team = teams.find((
@@ -40,7 +39,7 @@ export function getHomeResultsForTeam(teamId: number, fixtures: Fixture[]): Fixt
     }
   });
 
-  return [win, draw, loss];
+  return { win, draw, loss };
 }
 
 export function getAwayResultsForTeam(teamId: number, fixtures: Fixture[]): FixtureResult {
@@ -60,5 +59,9 @@ export function getAwayResultsForTeam(teamId: number, fixtures: Fixture[]): Fixt
     }
   });
 
-  return [win, draw, loss];
+  return { win, draw, loss };
+}
+
+export function getPlayersFromTeam(teamId: number, players: Element[]): Element[] {
+  return players.filter((player) => player.team === teamId);
 }

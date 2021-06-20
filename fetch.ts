@@ -1,6 +1,6 @@
 import { FIXTURE_URL, FPL_DATA_URL } from "./constants.ts";
-import { getTeamFixtures } from "./helpers.ts";
-import { Fixture, FPLData, Team } from "./interfaces.ts";
+import { getPlayersFromTeam, getTeamFixtures } from "./helpers.ts";
+import { Element, Fixture, FPLData, Team } from "./interfaces.ts";
 
 async function fetchData<Type>(url: string): Promise<Type> {
   const data: Response = await fetch(url);
@@ -25,4 +25,18 @@ export async function fetchFixtureDataForTeam(
   const fixtures = getTeamFixtures(teamId, data);
 
   return fixtures;
+}
+
+export async function fetchAllPlayerData(): Promise<Element[]> {
+  const data = await fetchData<FPLData>(FPL_DATA_URL);
+  return data.elements;
+}
+
+export async function fetchPlayerDataForTeam(
+  teamId: number,
+): Promise<Element[]> {
+  const data: Element[] = await fetchAllPlayerData();
+  const players = getPlayersFromTeam(teamId, data);
+
+  return players;
 }
